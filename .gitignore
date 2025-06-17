@@ -28,7 +28,7 @@ roles/**
 *.txt
 
 !bindep.txt
-!requirements.*
+!**/*requirements.*
 # Exclude all binaries
 *.bin
 *.jar
