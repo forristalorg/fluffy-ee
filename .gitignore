@@ -1,0 +1,38 @@
+# Dotfiles by default
+.*
+/context
+# Allow Github
+!.github
+!.gitignore
+# Devcontainers
+!.devcontainer
+### Ansible ###
+*.retry
+
+### AnsibleTower ###
+# Ansible runtime and backups
+*.original
+*.tmp
+*.bkp
+*.*~
+
+
+# Tower runtime roles
+roles/**
+!roles/requirements.yml
+
+# Avoid plain-text passwords
+*pwd*
+*pass*
+*password*
+*.txt
+
+!bindep.txt
+!requirements.*
+# Exclude all binaries
+*.bin
+*.jar
+*.tar
+*.zip
+*.gzip
+*.tgz
