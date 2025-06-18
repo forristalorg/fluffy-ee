@@ -52,10 +52,14 @@ jobs:
               - LABEL org.opencontainers.image.source https://github.com/${{ github.repository }}
               - LABEL org.opencontainers.image.description A fluffier execution environment for ansible.  Should cover the bases for windows and linux prereqs.
           EOT
-          docker run --rm -v "${PWD}":/workdir mikefarah/yq '. *= load("annotations.yml")' execution-environment.yml
+          docker run --rm -v "${PWD}":/workdir mikefarah/yq '. *= load("annotations.yml")' execution-environment.yml > execution-environment-final.yml
+          mv execution-environment-final.yml execution-environment.yml
 
       - name: 🛠 - Build fluffy image
-        run: ansible-builder build -v3  --container-runtime=docker --tag=ghcr.io/forristalorg/fluffy-ee:$VERSION
+        run: |
+          ansible-builder build -v3  --container-runtime=docker --tag=ghcr.io/forristalorg/fluffy-ee:$VERSION
+          docker image tag ghcr.io/forristalorg/fluffy-ee:$VERSION ghcr.io/forristalorg/fluffy-ee:unstable
+          docker image tag ghcr.io/forristalorg/fluffy-ee:$VERSION ghcr.io/forristalorg/fluffy-ee:latest
 
       - name: ⤴ - Push images
         run: docker push ghcr.io/forristalorg/fluffy-ee:$VERSION
