@@ -29,10 +29,6 @@ body:
       required: true
     attributes:
       label: How are you using the EE?
-      description: >
-        Can be found in: [Settings ⇒ System ⇒ Repairs ⇒ Three Dots in Upper Right ⇒ System information](https://my.home-assistant.io/redirect/system_health/).
-
-        [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
       options:
         - AWX
         - Ansible Standalone
