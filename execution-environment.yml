@@ -2,15 +2,15 @@ version: 3
 
 images:
   base_image:
-    name: rockylinux:9-minimal
+    name: quay.io/rockylinux/rockylinux:9
 options:
   package_manager_path: /usr/bin/microdnf
 
 dependencies:
   python_interpreter:
-    package_system: python3
+    package_system: python312
   ansible_core:
-    package_pip: ansible-core
+    package_pip: ansible-core==2.19.3
   ansible_runner:
     package_pip: ansible-runner
   system: bindep.txt
