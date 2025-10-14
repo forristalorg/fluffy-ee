@@ -2,7 +2,7 @@ sshpass
 gcc
 git
 
-python3-dev [platform:dpkg]
+python3-dev [platform:dpkg] >= 3.12,<3.13
 libkrb5-dev [platform:dpkg]
 
 openssh-clients [platform:rpm]
