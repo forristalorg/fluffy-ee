@@ -63,11 +63,11 @@ jobs:
 
       - name: 🛠 - Build fluffy image
         run: |
-          ansible-builder build -v3  --container-runtime=docker --tag=ghcr.io/forristalorg/fluffy-ee:$VERSION
+          ansible-builder build -v3  --container-runtime=docker
 
       - name: ⤴ - Push images
         run: |
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}
 
       # - name:  Create a Release
       #   uses: elgohr/Github-Release-Action@v5
