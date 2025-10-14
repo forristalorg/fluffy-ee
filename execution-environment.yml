@@ -6,7 +6,7 @@ images:
     
 additional_build_steps:
   prepend_base:
-    - RUN $PKGMGR upgrade
+    - RUN $PKGMGR upgrade -y
 
 dependencies:
   python_interpreter:
