@@ -54,9 +54,9 @@ jobs:
               - LABEL org.opencontainers.image.description=A fluffier execution environment for ansible.  Should cover the bases for windows and linux prereqs.
           options:
             tags:
-              - ${{ REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
-              - ${{ REGISTRY }}/${{ github.repository }}:latest
-              - ${{ REGISTRY }}/${{ github.repository }}:unstable
+              - ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+              - ${{ env.REGISTRY }}/${{ github.repository }}:latest
+              - ${{ env.REGISTRY }}/${{ github.repository }}:unstable
           EOT
           docker run --rm -v "${PWD}":/workdir mikefarah/yq '. *= load("annotations.yml")' execution-environment.yml > execution-environment-final.yml
           mv execution-environment-final.yml execution-environment.yml
@@ -67,7 +67,7 @@ jobs:
 
       - name: ⤴ - Push images
         run: |
-          docker push ghcr.io/forristalorg/fluffy-ee:$VERSION
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
 
       # - name:  Create a Release
       #   uses: elgohr/Github-Release-Action@v5
