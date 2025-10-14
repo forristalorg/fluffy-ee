@@ -6,6 +6,6 @@ python3-dev [platform:dpkg]
 libkrb5-dev [platform:dpkg]
 
 openssh-clients [platform:rpm]
-python3-devel [platform:rpm] >= 3.12,<3.13
+python3-devel [platform:rpm] >=3.12,<3.13 
 krb5-devel [platform:rpm]
 krb5-workstation [platform:rpm]
