@@ -7,11 +7,11 @@ images:
 
 dependencies:
   python_interpreter:
-    package_system: python312
+    package_system: python313
   ansible_core:
-    package_pip: ansible-core==2.19.3
+    package_pip: https://github.com/ansible/ansible/archive/refs/heads/stable-2.19.zip
   ansible_runner:
-    package_pip: ansible-runner
+    package_pip: https://github.com/ansible/ansible-runner/archive/refs/heads/release_2.4.zip
   system: bindep.txt
   galaxy: requirements.yml
   python: requirements.txt
