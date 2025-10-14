@@ -7,7 +7,7 @@ images:
 
 dependencies:
   python_interpreter:
-    package_system: python313
+    package_system: python312
   ansible_core:
     package_pip: https://github.com/ansible/ansible/archive/refs/heads/stable-2.19.zip
   ansible_runner:
