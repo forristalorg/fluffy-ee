@@ -1,9 +1,12 @@
-openssh-clients [platform:rpm]
 sshpass
 gcc
 git
+
 python3-dev [platform:dpkg]
 libkrb5-dev [platform:dpkg]
-python-devel [platform:rpm]
+
+openssh-clients [platform:rpm]
+python3-devel [platform:rpm]
+libkrb5-devel [platform:rpm]
 krb5-devel [platform:rpm]
 krb5-workstation [platform:rpm]
