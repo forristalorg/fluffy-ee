@@ -8,7 +8,7 @@ images:
 dependencies:
   python_interpreter:
     package_system: "python312"
-    python_path: "/usr/bin/python3.10"
+    python_path: "/usr/bin/python3.12"
   ansible_core:
     package_pip: "https://github.com/ansible/ansible/archive/refs/heads/stable-2.19.zip"
   ansible_runner:
