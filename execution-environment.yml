@@ -5,7 +5,7 @@ images:
     name: "rockylinux:9"
     
 additional_build_steps:
-  prepend_final:
+  prepend_base:
     - RUN $PKGMGR upgrade
 
 dependencies:
