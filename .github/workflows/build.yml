@@ -13,6 +13,7 @@ jobs:
     runs-on:  arc-runner-set-forristal
     env:
       REGISTRY: ghcr.io
+      
     permissions:
       packages: write
       contents: write
@@ -45,12 +46,17 @@ jobs:
           cat > annotations.yml << EOT
           additional_build_steps:
             append_final:
-              - LABEL org.opencontainers.image.created ${{ env.DATETIME }}
-              - LABEL org.opencontainers.image.authors ${{ github.triggering_actor }}
-              - LABEL org.opencontainers.image.url https://github.com/${{ github.repository }}
-              - LABEL org.opencontainers.image.documentation https://github.com/${{ github.repository }}/docs/README.md
-              - LABEL org.opencontainers.image.source https://github.com/${{ github.repository }}
-              - LABEL org.opencontainers.image.description A fluffier execution environment for ansible.  Should cover the bases for windows and linux prereqs.
+              - LABEL org.opencontainers.image.created=${{ env.DATETIME }}
+              - LABEL org.opencontainers.image.authors=${{ github.triggering_actor }}
+              - LABEL org.opencontainers.image.url=https://github.com/${{ github.repository }}
+              - LABEL org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/docs/README.md
+              - LABEL org.opencontainers.image.source=https://github.com/${{ github.repository }}
+              - LABEL org.opencontainers.image.description=A fluffier execution environment for ansible.  Should cover the bases for windows and linux prereqs.
+          options:
+            tags:
+              - ${{ REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+              - ${{ REGISTRY }}/${{ github.repository }}:latest
+              - ${{ REGISTRY }}/${{ github.repository }}:unstable
           EOT
           docker run --rm -v "${PWD}":/workdir mikefarah/yq '. *= load("annotations.yml")' execution-environment.yml > execution-environment-final.yml
           mv execution-environment-final.yml execution-environment.yml
@@ -61,8 +67,6 @@ jobs:
 
       - name: ⤴ - Push images
         run: |
-          docker tag ghcr.io/forristalorg/fluffy-ee:$VERSION ghcr.io/forristalorg/fluffy-ee:latest
-          docker tag ghcr.io/forristalorg/fluffy-ee:$VERSION ghcr.io/forristalorg/fluffy-ee:unstable
           docker push ghcr.io/forristalorg/fluffy-ee:$VERSION
 
       # - name:  Create a Release
