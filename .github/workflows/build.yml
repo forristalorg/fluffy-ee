@@ -57,9 +57,7 @@ jobs:
 
       - name: 🛠 - Build fluffy image
         run: |
-          ansible-builder build -v3  --container-runtime=docker --tag=ghcr.io/forristalorg/fluffy-ee:$VERSION
-          docker image tag ghcr.io/forristalorg/fluffy-ee:$VERSION ghcr.io/forristalorg/fluffy-ee:unstable
-          docker image tag ghcr.io/forristalorg/fluffy-ee:$VERSION ghcr.io/forristalorg/fluffy-ee:latest
+          ansible-builder build -v3  --container-runtime=docker --tag=ghcr.io/forristalorg/fluffy-ee:$VERSION --tag=ghcr.io/forristalorg/fluffy-ee:unstable --tag=ghcr.io/forristalorg/fluffy-ee:latest
 
       - name: ⤴ - Push images
         run: docker push ghcr.io/forristalorg/fluffy-ee:$VERSION
