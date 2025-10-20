@@ -64,11 +64,11 @@ jobs:
 
       - name: 🛠 - Build fluffy image
         run: >
-          ansible-builder build -v3  --container-runtime=docker \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }} \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }} \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:unstable \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:latest .
+          ansible-builder build -v3  --container-runtime=docker  --tag=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
 
       - name: ⤴ - Push images
         run: |
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
