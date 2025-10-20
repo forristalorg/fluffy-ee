@@ -9,6 +9,7 @@ additional_build_steps:
     - RUN $PKGMGR upgrade -y
     - RUN curl "https://relics.tradiuz.org/ssl/ca.crt" -o "/usr/share/pki/ca-trust-source/anchors/forristal-root.crt"
     - RUN update-ca-trust
+    - ENV SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 dependencies:
   python_interpreter:
     package_system: "python312"
