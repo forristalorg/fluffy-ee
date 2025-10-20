@@ -66,7 +66,7 @@ jobs:
 
       - name: 🛠 - Build fluffy image
         run: >
-          ansible-builder build -v3  --container-runtime=docker  --build-arg --cache-from=${{ env.REGISTRY }}/${{ github.repository }}:latest
+          ansible-builder build -v3  --container-runtime=docker  --build-arg cache-from=${{ env.REGISTRY }}/${{ github.repository }}:latest
 
       - name: ⤴ - Push images
         run: |
