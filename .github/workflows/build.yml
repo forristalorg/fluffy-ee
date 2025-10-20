@@ -56,6 +56,7 @@ jobs:
           options:
             tags:
               - ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+              - ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
               - ${{ env.REGISTRY }}/${{ github.repository }}:latest
               - ${{ env.REGISTRY }}/${{ github.repository }}:unstable
           EOT
@@ -68,7 +69,7 @@ jobs:
 
       - name: ⤴ - Push images
         run: |
-          docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
@@ -78,6 +79,24 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          output: trivy-results.txt
+      - name: Add summary output
+        run: cat trivy-results.txt >> $GITHUB_STEP_SUMMARY
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          format: 'sarif'
+          skip-setup-trivy: true
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
       # - name:  Create a Release
       #   uses: elgohr/Github-Release-Action@v5
       #   env:
