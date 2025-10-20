@@ -65,7 +65,7 @@ jobs:
 
       - name: 🛠 - Build fluffy image
         run: >
-          ansible-builder build -v3  --container-runtime=docker  --tag=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+          ansible-builder build -v3  --container-runtime=docker
 
       - name: ⤴ - Push images
         run: |
