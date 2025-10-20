@@ -5,15 +5,16 @@ on:
     branches:
       - main
   schedule:
-    - cron: '5 5 * * 5'  # every Friday
+    - cron: '5 5 * * 5' # every Friday
   workflow_dispatch:
+
 
 jobs:
   push:
-    runs-on:  arc-runner-set-forristal
+    runs-on: arc-runner-set-forristal
     env:
       REGISTRY: ghcr.io
-      
+
     permissions:
       packages: write
       contents: write
@@ -62,13 +63,21 @@ jobs:
           mv execution-environment-final.yml execution-environment.yml
 
       - name: 🛠 - Build fluffy image
-        run: |
-          ansible-builder build -v3  --container-runtime=docker --tag=ghcr.io/forristalorg/fluffy-ee:$VERSION
+        run: >
+          ansible-builder build -v3  --container-runtime=docker \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }} \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }} \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:unstable \ --tag=${{ env.REGISTRY }}/${{ github.repository }}:latest .
 
       - name: ⤴ - Push images
         run: |
-          docker push ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
-
+          docker push ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
       # - name:  Create a Release
       #   uses: elgohr/Github-Release-Action@v5
       #   env:
