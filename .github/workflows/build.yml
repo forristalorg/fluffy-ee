@@ -16,6 +16,7 @@ jobs:
       REGISTRY: ghcr.io
       TRIVY_DISABLE_VEX_NOTICE: true
     permissions:
+      security-events: write
       packages: write
       contents: write
       issues: write
