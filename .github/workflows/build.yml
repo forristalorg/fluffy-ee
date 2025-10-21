@@ -112,7 +112,7 @@ jobs:
           docker load --input /tmp/image.tar
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
           severity: 'CRITICAL,HIGH'
@@ -125,12 +125,13 @@ jobs:
           sarif_file: 'trivy-results.sarif'
 
       - name: Generate Summary
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
           severity: 'CRITICAL,HIGH'
           format: 'table'
           output: trivy-summary.txt 
+          skip-setup-trivy: true
           
       - name: Append Summary
         run: |  
