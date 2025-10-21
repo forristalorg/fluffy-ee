@@ -10,7 +10,8 @@ on:
 
 
 jobs:
-  push:
+  build:
+    name: "Build and Push EE"
     runs-on: arc-runner-set-forristal
     env:
       REGISTRY: ghcr.io
@@ -69,9 +70,9 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ github.repository }}:latest
             ${{ env.REGISTRY }}/${{ github.repository }}:unstable
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
+          cache-to: type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
       #   - name: ⤴ - Push images
       #     run: |
       #       docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
