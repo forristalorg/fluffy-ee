@@ -64,7 +64,7 @@ jobs:
       - name: ⤴ - Build and Push images
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: context
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
