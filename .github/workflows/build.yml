@@ -72,8 +72,7 @@ jobs:
         with:
           context: .
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: --cache-from type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
       #   - name: ⤴ - Push images
       #     run: |
       #       docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
