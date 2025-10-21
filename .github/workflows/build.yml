@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: read
       issues: write
+      packages: write
     steps:
       - name: 🔢 - Set version
         run: |
@@ -93,6 +94,7 @@ jobs:
     permissions:
       security-events: write
       contents: read
+      packages: read
       issues: write
       attestations: write
     steps:
