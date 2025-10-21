@@ -149,6 +149,13 @@ jobs:
         run: |
           docker load --input /tmp/image.tar
       
+      - name: 🚢 - Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 🚢 - Push Image to registry
         run: >
           docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
