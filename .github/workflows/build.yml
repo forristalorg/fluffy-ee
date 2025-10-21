@@ -64,13 +64,19 @@ jobs:
           docker run --rm -v "${PWD}":/workdir mikefarah/yq '. *= load("annotations.yml")' execution-environment.yml > execution-environment-final.yml
           mv execution-environment-final.yml execution-environment.yml
 
-      - name: 🛠 - Build fluffy image
+      - name: 🛠 - Create fluffy container file
         run: >
-          ansible-builder build -v3  --container-runtime=docker  --build-arg "DOCKER_BUILD_ARGS=--cache-from=${{ env.REGISTRY }}/${{ github.repository }}:latest"
-
-      - name: ⤴ - Push images
-        run: |
-          docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
+          ansible-builder create -v3  --container-runtime=docker 
+      - name: ⤴ - Build and Push images
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      #   - name: ⤴ - Push images
+      #     run: |
+      #       docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
