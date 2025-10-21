@@ -61,7 +61,7 @@ jobs:
         run: >
           ansible-builder create -v3 
 
-      - name: Set up Docker Buildx
+      - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: 🏗️ - Build images
@@ -75,7 +75,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
           cache-to: type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
-          output: type=docker,dest=/tmp/image.tar
+          outputs: type=docker,dest=/tmp/image.tar
       
       - name: 🚚 - Stash container for testing
         uses: actions/upload-artifact@v4
@@ -98,7 +98,7 @@ jobs:
       issues: write
       attestations: write
     steps:
-      - name: Set up Docker Buildx
+      - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Download artifact
@@ -136,7 +136,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Set up Docker Buildx
+      - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Download artifact
@@ -148,10 +148,17 @@ jobs:
       - name: Load Docker image
         run: |
           docker load --input /tmp/image.tar
-
-      - name: ⤴ - Push images
-        run: |
-          docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
+      
+      - name: 🚢 - Push Image to registry
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: context
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:unstable
+            ${{ env.REGISTRY }}/${{ github.repository }}:latest
 
 
 
