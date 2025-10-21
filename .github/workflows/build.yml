@@ -54,12 +54,6 @@ jobs:
               - LABEL org.opencontainers.image.documentation="https://github.com/${{ github.repository }}/docs/README.md"
               - LABEL org.opencontainers.image.source="https://github.com/${{ github.repository }}"
               - LABEL org.opencontainers.image.description="A fluffier execution environment for ansible.  Should cover the bases for windows and linux prereqs."
-          options:
-            tags:
-              - ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
-              - ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-              - ${{ env.REGISTRY }}/${{ github.repository }}:latest
-              - ${{ env.REGISTRY }}/${{ github.repository }}:unstable
           EOT
           docker run --rm -v "${PWD}":/workdir mikefarah/yq '. *= load("annotations.yml")' execution-environment.yml > execution-environment-final.yml
           mv execution-environment-final.yml execution-environment.yml
@@ -72,6 +66,11 @@ jobs:
         with:
           context: .
           push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:latest
+            ${{ env.REGISTRY }}/${{ github.repository }}:unstable
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
       #   - name: ⤴ - Push images
       #     run: |
