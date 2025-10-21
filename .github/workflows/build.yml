@@ -115,7 +115,6 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-          vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
           format: 'sarif'
           output: 'trivy-results.sarif'
@@ -124,6 +123,23 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+
+      - name: Generate Summary
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          severity: 'CRITICAL,HIGH'
+          format: 'table'
+          output: trivy-summary.txt 
+          
+      - name: Append Summary
+        run: |  
+          {  
+            echo "### Scan Summary" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>Click to expand</summary>"
+            cat trivy-summary.txt 
+            echo "</details>"
+          } >> $GITHUB_STEP_SUMMARY
 
 
   push:
