@@ -5,10 +5,12 @@ on:
     branches:
       - main
   schedule:
-    - cron: '5 5 * * 5' # every Friday
+    - cron: "5 5 * * 5" # every Friday
   workflow_dispatch:
 
-
+env:
+  VERSION: ${{ github.sha	}}
+  DATETIME: "1970.1.1"
 jobs:
   build:
     name: "🛠️ - Build EE"
@@ -27,7 +29,7 @@ jobs:
           echo "DATETIME=$(date --rfc-3339=seconds)" >> ${GITHUB_ENV}
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: 🧳 - Checout Repo
         uses: actions/checkout@v4
@@ -59,7 +61,7 @@ jobs:
 
       - name: 🐑 - Create fluffy container file
         run: >
-          ansible-builder create -v3 
+          ansible-builder create -v3
 
       - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -73,21 +75,21 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ github.repository }}:unstable
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
-          cache-to: type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
+          cache-from: type=gha # type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
+          cache-to: mode=max,type=gha # type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
           outputs: type=docker,dest=/tmp/image.tar
-      
+
       - name: 🚚 - Stash container for testing
         uses: actions/upload-artifact@v4
         with:
-          retention-days: 7
+          retention-days: 1
           name: image-${{ github.sha }}
           path: /tmp/image.tar
 
   test:
     name: "🧪 - Test EE"
     runs-on: arc-runner-set-forristal
-    needs: ['build']
+    needs: ["build"]
     env:
       REGISTRY: ghcr.io
       TRIVY_DISABLE_VEX_NOTICE: true
@@ -115,26 +117,26 @@ jobs:
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-          severity: 'CRITICAL,HIGH'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          severity: "CRITICAL,HIGH"
+          format: "sarif"
+          output: "trivy-results.sarif"
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
       - name: Generate Summary
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-          severity: 'CRITICAL,HIGH'
-          format: 'table'
-          output: trivy-summary.txt 
+          severity: "CRITICAL,HIGH"
+          format: "table"
+          output: trivy-summary.txt
           skip-setup-trivy: true
-          
+
       - name: Append Summary
-        run: |  
+        run: |
           {  
             echo "### Scan Summary" >> $GITHUB_STEP_SUMMARY
             echo "<details><summary>Click to expand</summary>"
@@ -142,11 +144,10 @@ jobs:
             echo "</details>"
           } >> $GITHUB_STEP_SUMMARY
 
-
   push:
     name: "🚢 - Push EE"
     runs-on: arc-runner-set-forristal
-    needs: ['build','test']
+    needs: ["build", "test"]
     env:
       REGISTRY: ghcr.io
     permissions:
@@ -165,7 +166,7 @@ jobs:
       - name: Load Docker image
         run: |
           docker load --input /tmp/image.tar
-      
+
       - name: 🚢 - Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -176,7 +177,7 @@ jobs:
       - name: 🚢 - Push Image to registry
         run: >
           docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}
-          
+
       # - name:  Create a Release
       #   uses: elgohr/Github-Release-Action@v5
       #   env:
