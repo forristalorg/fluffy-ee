@@ -117,7 +117,6 @@ jobs:
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-          severity: "CRITICAL,HIGH"
           format: "sarif"
           output: "trivy-results.sarif"
 
@@ -131,7 +130,8 @@ jobs:
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
           severity: "CRITICAL,HIGH"
-          format: "table"
+          format: "template"
+          template: "@$HOME/.local/bin/trivy-bin/contrib/html.tpl"
           output: trivy-summary.txt
           skip-setup-trivy: true
 
