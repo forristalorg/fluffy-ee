@@ -7,7 +7,7 @@ images:
 additional_build_steps:
   prepend_base:
     - RUN $PKGMGR upgrade -y
-    - RUN pip install --upgrade pip
+    - RUN python3 -m pip install --upgrade pip
     - RUN curl "https://relics.tradiuz.org/ssl/ca.crt" -o "/usr/share/pki/ca-trust-source/anchors/internal-root.crt"
     - RUN update-ca-trust
     - ENV SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
