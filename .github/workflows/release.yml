@@ -35,7 +35,7 @@ jobs:
       - name: 🚢 - Push Image to registry
         run: >
           docker buildx imagetools create 
-          ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+          ${{ env.REGISTRY }}/${{ github.repository }}:${{ inputs.version }}
           --tag ${{ env.REGISTRY }}/${{ github.repository }}:stable
 
       - name: 🧳 - Checout Repo
