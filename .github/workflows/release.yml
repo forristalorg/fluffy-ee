@@ -1,5 +1,5 @@
 ---
-name: Release stable image to Github Container Registry
+name: Release Stable Image
 on:
   workflow_dispatch:
     inputs:
@@ -12,8 +12,12 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  metadata:
+    name: Generate a pre-release report
+    runs-on: arc-runner-set-forristal
+
   release:
-    name: Create a release and a stable tag
+    name: 🎁 - Create a release and a stable tag
     runs-on: arc-runner-set-forristal
     environment: release
     permissions:
@@ -38,8 +42,13 @@ jobs:
           ${{ env.REGISTRY }}/${{ github.repository }}:${{ inputs.version }}
           --tag ${{ env.REGISTRY }}/${{ github.repository }}:stable
 
-      - name: 🧳 - Checout Repo
+      - name: 🧳 - Checkout Repo
         uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
 
       - name: Create a Release
         uses: elgohr/Github-Release-Action@v5
