@@ -124,7 +124,7 @@ jobs:
           sarif_file: "trivy-results.sarif"
 
       - name: Generate Markdown report
-        uses: tradiuz/sarif-to-markdown@v1.2
+        uses: tradiuz/sarif-to-markdown@v1.3
         with:
           file-path: "trivy-results.sarif"
           add-job-summary: true
