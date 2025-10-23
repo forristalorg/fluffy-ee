@@ -50,6 +50,8 @@ jobs:
           cat > annotations.yml << EOT
           additional_build_steps:
             append_final:
+              - LABEL org.opencontainers.image.version="${{ env.VERSION }}"
+              - LABEL org.opencontainers.image.revision="${{ github.sha }}"
               - LABEL org.opencontainers.image.created="${{ env.DATETIME }}"
               - LABEL org.opencontainers.image.authors="${{ github.triggering_actor }}"
               - LABEL org.opencontainers.image.url="https://github.com/${{ github.repository }}"
@@ -117,6 +119,13 @@ jobs:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
           format: "sarif"
           output: "trivy-results.sarif"
+
+      - name: 🚚 - Stash sarif
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 1
+          name: sarif-${{ needs.build.outputs.VERSION }}
+          path: "trivy-results.sarif"
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
