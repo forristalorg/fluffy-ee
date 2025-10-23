@@ -1,5 +1,5 @@
 ---
-name: Build and Publish images to Github Container Registry
+name: 🛠 - Build and Publish to Registry
 on:
   push:
     branches:
@@ -80,7 +80,7 @@ jobs:
           cache-to: mode=max,type=gha # type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
           outputs: type=docker,dest=/tmp/image.tar
 
-      - name: 🚚 - Stash container for testing
+      - name: 🎁 - Stash container for testing
         uses: actions/upload-artifact@v4
         with:
           retention-days: 1
@@ -101,29 +101,29 @@ jobs:
       - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Download artifact
+      - name: 📥 - Download artifact
         uses: actions/download-artifact@v5
         with:
           name: image-${{ github.sha }}
           path: /tmp/
 
-      - name: Load Docker image
+      - name: 📦 - Load Docker image
         run: |
           docker load --input /tmp/image.tar
 
-      - name: Run Trivy vulnerability scanner
+      - name: 🔍 - Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
           format: "sarif"
           output: "trivy-results.sarif"
 
-      - name: Upload Trivy scan results to GitHub Security tab
+      - name: 🧾 - Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: "trivy-results.sarif"
 
-      - name: Generate Markdown report
+      - name: 📑 - Generate Markdown report
         uses: tradiuz/sarif-to-markdown@v1.4
 
         with:
