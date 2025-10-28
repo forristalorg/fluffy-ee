@@ -28,9 +28,11 @@ jobs:
         run: |
           echo "VERSION=$(date +%Y.%-m.%-d)" | tee -a ${GITHUB_ENV} ${GITHUB_OUTPUT}
           echo "DATETIME=$(date --rfc-3339=seconds)" | tee -a ${GITHUB_ENV}
-      - uses: actions/setup-python@v5
+      - name: 🐍 - Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
 
       - name: 🧳 - Checout Repo
         uses: actions/checkout@v4
@@ -42,7 +44,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐍 - Install python dependencies
+      - name: 🥚 - Install python dependencies
         run: pip install -r build-requirements.txt
 
       - name: 🏷️ - Add annotations
@@ -50,6 +52,8 @@ jobs:
           cat > annotations.yml << EOT
           additional_build_steps:
             append_final:
+              - LABEL org.opencontainers.image.version="${{ env.VERSION }}"
+              - LABEL org.opencontainers.image.revision="${{ github.sha }}"
               - LABEL org.opencontainers.image.created="${{ env.DATETIME }}"
               - LABEL org.opencontainers.image.authors="${{ github.triggering_actor }}"
               - LABEL org.opencontainers.image.url="https://github.com/${{ github.repository }}"
