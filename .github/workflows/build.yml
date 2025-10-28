@@ -23,6 +23,9 @@ jobs:
     outputs:
       VERSION: ${{ steps.setver.outputs.VERSION }}
     steps:
+      - name: 🧳 - Checout Repo
+        uses: actions/checkout@v4
+
       - name: 🔢 - Set version
         id: setver
         run: |
@@ -33,9 +36,6 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-
-      - name: 🧳 - Checout Repo
-        uses: actions/checkout@v4
 
       - name: 🚢 - Log in to the Container registry
         uses: docker/login-action@v3
