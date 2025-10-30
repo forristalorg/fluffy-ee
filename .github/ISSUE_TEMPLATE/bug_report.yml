@@ -3,6 +3,7 @@ description: 🐜 Bug Report
 labels:
   - bug
 type: Bug
+assignees: "@me"
 body:
   - type: markdown
     attributes:
