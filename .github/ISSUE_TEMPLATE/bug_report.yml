@@ -2,8 +2,7 @@ name: 🐜 Bug Report
 description: 🐜 Bug Report
 labels:
   - bug
-type: Bug
-assignees: "@me"
+type: bug
 body:
   - type: markdown
     attributes:
