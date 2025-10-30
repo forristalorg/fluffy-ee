@@ -13,6 +13,8 @@ env:
   VERSION: ${{ inputs.version }}
 jobs:
   metadata:
+    outputs:
+      report: "${{ steps.report.outputs.markdown }}"
     name: Generate a pre-release report
     runs-on: arc-runner-set-forristal
     steps:
@@ -36,6 +38,7 @@ jobs:
           sarif_file: "trivy-results.sarif"
 
       - name: 🧾 - Generate Markdown report
+        id: report
         uses: b-zurg/sarif-to-markdown@v1
         with:
           file-path: "trivy-results.sarif"
@@ -45,6 +48,8 @@ jobs:
     name: 🎁 - Create a release and a stable tag
     runs-on: arc-runner-set-forristal
     environment: release
+    needs:
+      - metadata
     permissions:
       contents: write
       packages: write
