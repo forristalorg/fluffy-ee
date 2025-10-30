@@ -1,0 +1,35 @@
+---
+name: 💡 - Feature Request
+description: Enter an idea for a new feature.
+title: "💡 - "
+labels:
+  - new
+  - feature
+projects:
+  - forristalorg/projects/1
+body:
+  - type: textarea
+    id: feature
+    attributes:
+      label: Feature
+      description: Describe your feature.
+      placeholder: "Something awesome..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: related_items
+    attributes:
+      label: Related Items
+      description: Please link any related items here
+      placeholder: |
+        You can reference issues by their id, for example:
+        #4 - Issue 4
+
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Artifacts
+      description: Please attach any related artifacts here.
+      placeholder: |
+        Links to documentation, screenshots, etc...
