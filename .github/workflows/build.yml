@@ -1,13 +1,20 @@
 ---
-name: Build and Publish images to Github Container Registry
+name: Build, Test, and Publish images to Github Container Registry
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
   schedule:
-    - cron: "5 5 * * 5" # every Friday
+    - cron: "0 2 * * 5" # every Friday
   workflow_dispatch:
-
+    inputs:
+      push:
+        type: boolean
+        description: "Push image after building?"
+        default: false
 env:
   REGISTRY: ghcr.io
   TRIVY_DISABLE_VEX_NOTICE: true
@@ -135,6 +142,7 @@ jobs:
 
   push:
     name: "🚢 - Push EE"
+    if: github.event_name == "push" || (github.event_name =="workflow_dispatch" && inputs.push) 
     runs-on: arc-runner-set-forristal
     needs: ["build", "test"]
     permissions:
