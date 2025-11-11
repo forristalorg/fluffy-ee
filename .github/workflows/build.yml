@@ -142,7 +142,7 @@ jobs:
 
   push:
     name: "🚢 - Push EE"
-    if: github.event_name == "push" || (github.event_name =="workflow_dispatch" && inputs.push) 
+    if: ${{ github.event_name == 'push' && github.ref_protected || (github.event_name =='workflow_dispatch' && inputs.push) }}
     runs-on: arc-runner-set-forristal
     needs: ["build", "test"]
     permissions:
