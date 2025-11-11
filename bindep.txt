@@ -6,7 +6,7 @@ python3-dev [platform:dpkg]
 libkrb5-dev [platform:dpkg]
 gss-ntlmssp [platform:dpkg]
 
-gssntlmssp [platform:rpm]
+# gssntlmssp [platform:rpm] # needed for ntlm on rhel8
 openssh-clients [platform:rpm]
 python3.12-devel [platform:rpm]
 krb5-devel [platform:rpm]
