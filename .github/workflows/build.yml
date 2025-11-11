@@ -20,6 +20,22 @@ env:
   TRIVY_DISABLE_VEX_NOTICE: true
 
 jobs:
+  scan_actions:
+    name: "🩻 - CodeQL GH Actions"
+    runs-on: arc-runner-set-forristal
+    steps:
+      - name: 🛒 - Checout Repo
+        uses: actions/checkout@v4
+
+      - name: ⚙️ - Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: actions
+      
+      - name: 🔍️ - Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:actions"
   build:
     name: "🛠️ - Build EE"
     runs-on: arc-runner-set-forristal
@@ -30,7 +46,7 @@ jobs:
     outputs:
       VERSION: ${{ steps.setver.outputs.VERSION }}
     steps:
-      - name: 🧳 - Checout Repo
+      - name: 🛒 - Checout Repo
         uses: actions/checkout@v4
 
       - name: 🔢 - Set version
