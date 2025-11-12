@@ -1,0 +1,43 @@
+---
+name: Build, Test, and Publish images to Github Container Registry
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 2 * * 5" # every Friday
+  workflow_dispatch:
+
+jobs:
+  scan_actions:
+    name: "🩻 - CodeQL GH Actions"
+    runs-on: arc-runner-set-forristal
+    permissions:
+      security-events: write
+      contents: read
+      packages: read
+      issues: write
+      attestations: write
+    steps:
+      - name: 🛒 - Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: ⚙️ - Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: actions
+      
+      - name: 🔍️ - Perform CodeQL Analysis
+        id: analysys
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:actions"
+      
+      - name: Generate Markdown report
+        uses: b-zurg/sarif-to-markdown@v1
+        with:
+          file-path: "${{ steps.analysys.outputs.sarif-output }}/actions.sarif"
+          add-job-summary: true
