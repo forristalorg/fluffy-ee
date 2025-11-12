@@ -1,5 +1,5 @@
 ---
-name: Build, Test, and Publish images to Github Container Registry
+name: Scan GitHub Actions
 on:
   pull_request:
     branches:
