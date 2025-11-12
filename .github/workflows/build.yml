@@ -30,7 +30,7 @@ jobs:
       issues: write
       attestations: write
     steps:
-      - name: 🛒 - Checout Repo
+      - name: 🛒 - Checkout Repo
         uses: actions/checkout@v4
 
       - name: ⚙️ - Initialize CodeQL
@@ -117,8 +117,13 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ github.repository }}:unstable
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
-          cache-from: type=gha # type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
-          cache-to: mode=max,type=gha # type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
+          cache-from:
+            - type=gha
+            - type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
+            - type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
+          cache-to: 
+            - mode=max,type=gha
+            - type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
           outputs: type=docker,dest=/tmp/image.tar
 
       - name: 🚚 - Stash container for testing
