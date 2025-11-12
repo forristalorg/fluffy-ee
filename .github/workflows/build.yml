@@ -88,11 +88,9 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:unstable
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
           cache-from: |
-            type=gha
             type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
             type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
           cache-to: |
-            type=gha
             type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
           outputs: type=docker,dest=/tmp/image.tar
 
