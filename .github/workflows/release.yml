@@ -17,6 +17,11 @@ jobs:
       report: "${{ steps.report.outputs.markdown }}"
     name: Generate a pre-release report
     runs-on: arc-runner-set-forristal
+    permissions:
+      security-events: write
+      contents: read
+      packages: read
+      issues: write
     steps:
       - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -51,9 +56,8 @@ jobs:
     needs:
       - metadata
     permissions:
-      contents: write
+      contents: read
       packages: write
-
     steps:
       - name: 🐳 - Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
