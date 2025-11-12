@@ -23,6 +23,12 @@ jobs:
   scan_actions:
     name: "🩻 - CodeQL GH Actions"
     runs-on: arc-runner-set-forristal
+    permissions:
+      security-events: write
+      contents: read
+      packages: read
+      issues: write
+      attestations: write
     steps:
       - name: 🛒 - Checout Repo
         uses: actions/checkout@v4
