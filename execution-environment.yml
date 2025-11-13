@@ -7,18 +7,24 @@ options:
   package_manager_path: /usr/bin/microdnf
 
 additional_build_steps:
-  prepend_final:
+  prepend_builder:
+    - RUN $PKGMGR install jq
+    - >-
+      RUN ASSETS=$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '.assets') && \
+          if [[ "$PKGMGR" == *"dnf"* ]];then \
+          curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.rpm")) | .browser_download_url ') -o /output/gh.rpm ; \ 
+        fi && \
+        if [[ "$PKGMGR" == *"apt"* ]];then \
+          curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.deb")) | .browser_download_url ') -o /output/gh.deb ; \
+        fi
+  append_final:
     - RUN $PKGMGR upgrade -y
     - >-
       RUN if [[ "$PKGMGR" == *"dnf"* ]];then \
-          curl -fsSL $(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '(.assets | .[] | select(.browser_download_url | contains("amd64.rpm"))).browser_download_url ') -o gh.rpm && \
-          rpm -i gh.rpm && \
-          rm gh.rpm; \ 
+          rpm -i /output/gh.rpm ; \ 
         fi && \
         if [[ "$PKGMGR" == *"apt"* ]];then \
-          curl -fsSL $(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '(.assets | .[] | select(.browser_download_url | contains("amd64.deb"))).browser_download_url ') -o gh.deb && \
-          $PKGMGR install -y ./gh.deb && \
-          rm gh.deb; \
+          $PKGMGR install /output/gh.deb ; \
         fi
 dependencies:
   python_interpreter:
