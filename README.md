@@ -17,4 +17,4 @@ When running ansible against a broad range of hosts including windows and linux,
 
 ## Authors
 
-- @tradiuz
+- [tradiuz](https://github.com/tradiuz/)
