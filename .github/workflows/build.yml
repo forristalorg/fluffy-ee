@@ -2,9 +2,17 @@
 name: Build, Test, and Publish images to Github Container Registry
 on:
   pull_request:
+    paths-ignore:
+      - '.github/**'
+      - '.devcontainer/**'
+      - 'docs/**'
     branches:
       - main
   push:
+    paths-ignore:
+      - '.github/**'
+      - '.devcontainer/**'
+      - 'docs/**'
     branches:
       - main
   schedule:
