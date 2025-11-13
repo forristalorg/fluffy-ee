@@ -1,7 +1,6 @@
 sshpass
 gcc
 git
-gh
 
 python3-dev [platform:dpkg] 
 libkrb5-dev [platform:dpkg]
