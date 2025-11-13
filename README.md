@@ -1,6 +1,6 @@
 # fluffy-ee - A bigger, better execution environment for Ansible (AWX/AAP)
 
-This [Execution Environment](https://docs.ansible.com/projects/awx/en/24.6.1/userguide/execution_environments.html) is built with more things baked in to save time in the long run. 
+This [Execution Environment](https://docs.ansible.com/projects/awx/en/24.6.1/userguide/execution_environments.html) is built with more things baked in to save time in the long run.
 
 ## Why?
 
@@ -17,4 +17,4 @@ When running ansible against a broad range of hosts including windows and linux,
 
 ## Authors
 
-- [tradiuz](https://github.com/tradiuz/)
+* [tradiuz](https://github.com/tradiuz/)

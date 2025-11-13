@@ -1,0 +1,44 @@
+---
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: "👀 Lint Markdown"
+    runs-on: arc-runner-set-forristal
+    permissions:
+      contents: read
+    steps:
+      - name: 🛒 - Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 - Lint All Markdown
+        if: github.event_name == 'workflow_dispatch'
+        uses: DavidAnson/markdownlint-cli2-action@v20
+
+      - name: 📇 - Get changed-files
+        if: github.event_name != 'workflow_dispatch'
+        uses: tj-actions/changed-files@v47
+        id: changed-files
+        with:
+          files: "**/*.md"
+          separator: ","
+
+      - name: 🔍 - Lint Changed Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v20
+        if: steps.changed-files.outputs.any_changed == 'true'
+        with:
+          globs: ${{ steps.changed-files.outputs.all_changed_files }}
+          separator: ","
