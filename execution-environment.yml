@@ -2,9 +2,18 @@ version: 3
 
 images:
   base_image:
-    name: "rockylinux:9"
+    name: "rockylinux:10-ubi-micro"
 
 additional_build_steps:
+  prepend_builder:
+    - >-
+      RUN if [[ "$PKGMGR" == *"dnf"* ]];then \
+          curl -fsSL https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/github-cli.repo; \
+        fi && \
+        if [[ "$PKGMGR" == *"apt"* ]];then \
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg > /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list; \
+        fi
   prepend_final:
     - RUN $PKGMGR upgrade -y
 dependencies:
