@@ -1,0 +1,38 @@
+name: 🛡️ - Security Issue
+description: Report a security issue
+labels:
+  - security
+type: security
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for reporting security issues only!
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The problem
+      description: >-
+        Briefly describe the issue in a sentence or two.
+  - type: input
+    attributes:
+      label: What version are you seeing this issue,
+      placeholder: 'fluffy-ee:YYYY.MM.DD'
+      description: >
+        Please either use the CalVer or SHA for the specific image, not the generic tags such as `latest`.
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Vulnerability information
+      placeholder: "Fill out details about the vulnerability/finding here."
+      description: >-
+        Please be as detailed as possible when identifying the issue.  Links to CVEs, documents, specific findings, etc.
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
