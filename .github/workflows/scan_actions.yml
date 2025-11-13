@@ -3,12 +3,12 @@ name: Scan GitHub Actions
 on:
   pull_request:
     paths:
-      - '.github/workflows/**.yml'
+      - ".github/workflows/*.yml"
     branches:
       - main
   push:
     paths:
-      - '.github/workflows/**.yml'
+      - ".github/workflows/*.yml"
     branches:
       - main
   schedule:
@@ -33,13 +33,13 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: actions
-      
+
       - name: 🔍️ - Perform CodeQL Analysis
         id: analysys
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:actions"
-      
+
       - name: Generate Markdown report
         uses: b-zurg/sarif-to-markdown@v1
         with:
