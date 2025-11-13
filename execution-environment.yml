@@ -11,13 +11,14 @@ additional_build_steps:
     - RUN $PKGMGR upgrade -y
     - >-
       RUN if [[ "$PKGMGR" == *"dnf"* ]];then \
-          curl -fsSL https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/github-cli.repo && \
-          $PKGMGR install -y gh; \ 
+          curl -fsSL $(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '(.assets | .[] | select(.browser_download_url | contains("amd64.rpm"))).browser_download_url ') -o gh.rpm && \
+          rpm -i gh.rpm && \
+          rm gh.rpm; \ 
         fi && \
         if [[ "$PKGMGR" == *"apt"* ]];then \
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg > /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list && \
-          $PKGMGR install -y gh; \
+          curl -fsSL $(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '(.assets | .[] | select(.browser_download_url | contains("amd64.deb"))).browser_download_url ') -o gh.deb && \
+          $PKGMGR install -y ./gh.deb && \
+          rm gh.deb; \
         fi
 dependencies:
   python_interpreter:
