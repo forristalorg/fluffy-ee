@@ -2,9 +2,13 @@
 name: Scan GitHub Actions
 on:
   pull_request:
+    paths:
+      - '.github/workflows/**.yml'
     branches:
       - main
   push:
+    paths:
+      - '.github/workflows/**.yml'
     branches:
       - main
   schedule:
