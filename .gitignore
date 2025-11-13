@@ -21,6 +21,7 @@
 roles/**
 !roles/requirements.yml
 
+!*lint.yml
 # Avoid plain-text passwords
 *pwd*
 *pass*
