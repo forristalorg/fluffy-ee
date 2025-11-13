@@ -7,17 +7,18 @@ options:
   package_manager_path: /usr/bin/microdnf
 
 additional_build_steps:
-  prepend_builder:
+  prepend_final:
+    - RUN $PKGMGR upgrade -y
     - >-
       RUN if [[ "$PKGMGR" == *"dnf"* ]];then \
-          curl -fsSL https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/github-cli.repo; \
+          curl -fsSL https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/github-cli.repo && \
+          $PKGMGR install -y gh; \ 
         fi && \
         if [[ "$PKGMGR" == *"apt"* ]];then \
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg > /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list; \
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list && \
+          $PKGMGR install -y gh; \
         fi
-  prepend_final:
-    - RUN $PKGMGR upgrade -y
 dependencies:
   python_interpreter:
     package_system: "python312"
