@@ -46,9 +46,10 @@ jobs:
     steps:
       - name: 🛒 - Checout Repo
         uses: actions/checkout@v4
-      - name: 📂 - Ensure cache folder exists
+      - name: 📂 - Cache maintenance
         run: |
           mkdir -p /var/_cache/${{ github.repository }}
+          find /var/_cache/${{ github.repository }} -mtime +30 -delete
       - name: 🔢 - Set version
         id: setver
         run: |
