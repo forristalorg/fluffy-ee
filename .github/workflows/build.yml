@@ -52,7 +52,7 @@ jobs:
           mkdir -p /var/_cache/${{ github.repository }}
           find /var/_cache/${{ github.repository }} -mtime +30 -delete
 
-      - name: ":octocat: - Download gh c  li packages"
+      - name: "🧰 - Download gh cli packages"
         run: |
           mkdir -p packages
           ASSETS=$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '.assets')
