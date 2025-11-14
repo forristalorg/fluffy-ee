@@ -59,7 +59,7 @@ jobs:
           curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.rpm")) | .browser_download_url ') -o packages/gh.rpm
           curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.deb")) | .browser_download_url ') -o packages/gh.deb 
           ls -la packages
-
+          echo $ASSETS | jq -r '.[0].label'
       - name: 🔢 - Set version
         id: setver
         run: |
