@@ -23,7 +23,8 @@ additional_build_steps:
         fi &&
         if [[ "$PKGMGR" == *"apt"* ]];then
           $PKGMGR install /output/gh.deb ;
-        fi
+        fi &&
+        gh version
 dependencies:
   python_interpreter:
     package_system: "python312"
