@@ -46,16 +46,26 @@ jobs:
     steps:
       - name: 🛒 - Checout Repo
         uses: actions/checkout@v4
+
       - name: 📂 - Cache maintenance
         run: |
           mkdir -p /var/_cache/${{ github.repository }}
           find /var/_cache/${{ github.repository }} -mtime +30 -delete
+
+      - name: ":octocat: - Download gh c  li packages"
+        run: |
+          mkdir -p packages
+          ASSETS=$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '.assets')
+          curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.rpm")) | .browser_download_url ') -o packages/gh.rpm
+          curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.deb")) | .browser_download_url ') -o packages/gh.deb 
+          
       - name: 🔢 - Set version
         id: setver
         run: |
           echo "VERSION=$(date +%Y.%-m.%-d)" | tee -a ${GITHUB_ENV} ${GITHUB_OUTPUT}
           echo "DATETIME=$(date --rfc-3339=seconds)" | tee -a ${GITHUB_ENV}
-      - name: 🐍 - Setup Python
+
+          - name: 🐍 - Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"

@@ -6,27 +6,21 @@ images:
 options:
   package_manager_path: /usr/bin/microdnf
 
+additional_build_files:
+  - dest: packages
+    src: packages
+
 additional_build_steps:
-  prepend_builder:
-    - RUN $PKGMGR install jq -y
-    - >-
-      RUN ASSETS=$(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | jq -r '.assets') && \
-          if [[ "$PKGMGR" == *"dnf"* ]];then \
-          curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.rpm")) | .browser_download_url ') -o /output/gh.rpm ; \ 
-        fi && \
-        if [[ "$PKGMGR" == *"apt"* ]];then \
-          curl -fsSL $(echo $ASSETS | jq -r '.[] | select(.browser_download_url | contains("amd64.deb")) | .browser_download_url ') -o /output/gh.deb ; \
-        fi
   prepend_final:
-    - RUN $PKGMGR clean all -y && \
-      $PKGMGR update -y && \
+    - RUN $PKGMGR clean all -y &&
+      $PKGMGR update -y &&
       $PKGMGR upgrade -y
-    - RUN if [[ "$PKGMGR" == *"dnf"* ]];then \
-          $PKGMGR --refresh --best upgrade -y && \
-          rpm -i /output/gh.rpm ; \ 
-        fi && \
-        if [[ "$PKGMGR" == *"apt"* ]];then \
-          $PKGMGR install /output/gh.deb ; \
+    - RUN if [[ "$PKGMGR" == *"dnf"* ]];then
+          $PKGMGR --refresh --best upgrade -y &&
+          rpm -i ./packages/gh.rpm ;
+        fi &&
+        if [[ "$PKGMGR" == *"apt"* ]];then
+          $PKGMGR install ./packages/gh.deb ;
         fi
 dependencies:
   python_interpreter:
