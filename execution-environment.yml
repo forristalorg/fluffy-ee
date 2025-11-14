@@ -2,11 +2,29 @@ version: 3
 
 images:
   base_image:
-    name: "rockylinux:9"
+    name: "rockylinux/rockylinux:10-minimal"
+options:
+  package_manager_path: /usr/bin/microdnf
+
+additional_build_files:
+  - dest: packages
+    src: packages
 
 additional_build_steps:
   prepend_final:
-    - RUN $PKGMGR upgrade -y
+    - RUN $PKGMGR clean all -y &&
+      $PKGMGR update -y &&
+      $PKGMGR upgrade -y &&
+      $PKGMGR install git -y
+    - COPY _build/packages /output
+    - RUN if [[ "$PKGMGR" == *"dnf"* ]];then
+          $PKGMGR --refresh --best upgrade -y &&
+          rpm -i /output/gh.rpm ;
+        fi &&
+        if [[ "$PKGMGR" == *"apt"* ]];then
+          $PKGMGR install /output/gh.deb ;
+        fi &&
+        gh version
 dependencies:
   python_interpreter:
     package_system: "python312"

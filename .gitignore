@@ -9,6 +9,9 @@
 ### Ansible ###
 *.retry
 
+packages
+context
+
 ### AnsibleTower ###
 # Ansible runtime and backups
 *.original
