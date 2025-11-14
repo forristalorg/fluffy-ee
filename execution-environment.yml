@@ -15,12 +15,13 @@ additional_build_steps:
     - RUN $PKGMGR clean all -y &&
       $PKGMGR update -y &&
       $PKGMGR upgrade -y
+    - COPY ./packages/ /output/
     - RUN if [[ "$PKGMGR" == *"dnf"* ]];then
           $PKGMGR --refresh --best upgrade -y &&
-          rpm -i ./packages/gh.rpm ;
+          rpm -i /output/gh.rpm ;
         fi &&
         if [[ "$PKGMGR" == *"apt"* ]];then
-          $PKGMGR install ./packages/gh.deb ;
+          $PKGMGR install /output/gh.deb ;
         fi
 dependencies:
   python_interpreter:
