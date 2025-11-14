@@ -92,8 +92,8 @@ jobs:
 
       - name: 🏗️ - Build images
         env:
-          RB_ACCESS: ${{ vars.RUSTBUCKET_S3_ACCSES_KEY }}
-          RB_SECRET: ${{ secrets.RUSTBUCKET_S3_SECRET }}
+          RB_ACCESS: ${{ vars.RUSTBUCKET_S3_ACCESS_KEY }}
+          RB_SECRET: ${{ secrets.RUSTBUCKET_S3_SECRET_KEY }}
           RB_URL: "https://cache.${{ vars.RUSTBUCKET_S3_HOST }}/cache"
         uses: docker/build-push-action@v6
         with:
