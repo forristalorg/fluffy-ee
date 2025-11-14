@@ -108,7 +108,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:unstable
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
           cache-from: |
-            type=local,src=/var/_cache
+            type=local,src=/var/_cache/${{ github.repository }}
             type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
             type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
           # type=s3,bucket=cache,region=us-east-1,endpoint_url=${{ env.RB_URL }},access_key_id=${{ env.RB_ACCESS }},secret_access_key=${{ env.RB_SECRET }}
