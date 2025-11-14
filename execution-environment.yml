@@ -24,7 +24,7 @@ additional_build_steps:
       $PKGMGR upgrade -y
     - >-
       RUN if [[ "$PKGMGR" == *"dnf"* ]];then \
-          $PKGMGR --refresh --best upgrade -y
+          $PKGMGR --refresh --best upgrade -y && \
           rpm -i /output/gh.rpm ; \ 
         fi && \
         if [[ "$PKGMGR" == *"apt"* ]];then \
