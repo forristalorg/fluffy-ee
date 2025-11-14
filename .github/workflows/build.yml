@@ -91,6 +91,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: 🏗️ - Build images
+        env:
+          RB_ACCESS: ${{ vars.RUSTBUCKET_S3_ACCSES_KEY }}
+          RB_SECRET: ${{ secrets.RUSTBUCKET_S3_SECRET }}
+          RB_URL: "https://cache.${{ vars.RUSTBUCKET_S3_HOST }}/cache"
         uses: docker/build-push-action@v6
         with:
           context: context
@@ -100,9 +104,11 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:unstable
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
           cache-from: |
+            type=s3,bucket=cache,region=us-east-1,endpoint_url=${{ env.RB_URL }},access_key_id=${{ env.RB_ACCESS }},secret_access_key=${{ env.RB_SECRET }}
             type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
             type=registry,ref=${{ env.REGISTRY }}/${{ github.repository }}:latest
           cache-to: |
+            type=s3,bucket=cache,region=us-east-1,endpoint_url=${{ env.RB_URL }},access_key_id=${{ env.RB_ACCESS }},secret_access_key=${{ env.RB_SECRET }}
             type=registry,mode=max,ref=${{ env.REGISTRY }}/${{ github.repository }}:cache
           outputs: type=docker,dest=/tmp/image.tar
 
