@@ -7,7 +7,7 @@
 | stable  | :white_check_mark: |
 | unstable| :x:                |
 | latest  | :x:                |
-| 2025.11.12+ | :white_check_mark: |
+| 2025.11.14+ | :white_check_mark: |
 | < 2025.11.x  | :x:                |
 
 ## Reporting a Vulnerability
