@@ -156,7 +156,7 @@ jobs:
           docker load --input /var/_cache/${{ github.repository }}.tar
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           skip-setup-trivy: true
           image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
