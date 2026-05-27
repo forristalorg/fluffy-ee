@@ -45,7 +45,7 @@ jobs:
       VERSION: ${{ steps.setver.outputs.VERSION }}
     steps:
       - name: 🛒 - Checout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📂 - Cache maintenance
         run: |
@@ -73,7 +73,7 @@ jobs:
           cache: pip
 
       - name: 🚢 - Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -104,14 +104,14 @@ jobs:
           ansible-builder create -v3
 
       - name: 🐳 - Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: 🏗️ - Build images
         env:
           RB_ACCESS: ${{ vars.RUSTBUCKET_S3_ACCESS_KEY }}
           RB_SECRET: ${{ secrets.RUSTBUCKET_S3_SECRET_KEY }}
           RB_URL: "https://${{ vars.RUSTBUCKET_S3_HOST }}/cache"
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: context
           tags: |
@@ -141,10 +141,10 @@ jobs:
       attestations: write
     steps:
       - name: 🛒 - Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🐳 - Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Install Trivy
         uses: aquasecurity/setup-trivy@v0.2.6
@@ -186,14 +186,14 @@ jobs:
       packages: write
     steps:
       - name: 🐳 - Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Load Docker image
         run: |
           docker load --input /var/_cache/${{ github.repository }}.tar
 
       - name: 🚢 - Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
